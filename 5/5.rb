@@ -133,70 +133,43 @@ def find_first_sub_range(range, almanac)
   {start: range[:start], end: target[:middle], length: target[:middle] - range[:start] + 1}
 end
 
-def found_range_boundary?(range, almanac)
-  range_start = range[:start]
-  range_end = range[:end]
-  range_distance = range_end - range_start + 1
 
-  range_start_mapped = e2e_mapping(range_start, almanac)
-  range_end_mapped =  e2e_mapping(range_end, almanac)
-  element_after_range_mapped = e2e_mapping(range_end+1, almanac)
-  range_mapped_distance = range_end_mapped - range_start_mapped
-  element_after_range_mapped_distance = element_after_range_mapped - range_start_mapped
+def calculate_middle_values(range, almanac)
+  start_value = range[:start]
+  middle_value = range[:start] + (range[:end] - range[:start]) / 2
+  range[:middle] = middle_value
+  start_to_middle_distance = middle_value - start_value
 
-  range_distance == range_mapped_distance &&
-    range_distance + 1 !=  element_after_range_mapped_distance
+  start_value_mapped = e2e_mapping(start_value, almanac)
+  middle_value_mapped = e2e_mapping(middle_value, almanac)
+  start_to_middle_mapped_distance = middle_value_mapped - start_value_mapped
+
+  element_after_middle_mapped = e2e_mapping(middle_value + 1, almanac)
+  start_to_element_after_middle_mapped_distance = element_after_middle_mapped - start_value_mapped
+
+  {
+    start_to_middle_distance: start_to_middle_distance,
+    start_to_middle_mapped_distance: start_to_middle_mapped_distance,
+    start_to_element_after_middle_mapped_distance: start_to_element_after_middle_mapped_distance
+  }
 end
 
 def middle_on_target_range?(range, almanac)
-  start_value = range[:start]
-  middle_value = range[:start] + (range[:end] - range[:start]) / 2
-  range[:middle] = middle_value
-  start_to_middle_distance = middle_value - start_value
-
-  start_value_mapped = e2e_mapping(start_value, almanac)
-  middle_value_mapped =  e2e_mapping(middle_value, almanac)
-  start_to_middle_mapped_distance = middle_value_mapped - start_value_mapped
-
-  element_after_middle_mapped = e2e_mapping(middle_value + 1, almanac)
-  start_to_element_after_middle_mapped_distance = element_after_middle_mapped - start_value_mapped
-
-  start_to_middle_distance == start_to_middle_mapped_distance &&
-    start_to_middle_distance + 1 !=  start_to_element_after_middle_mapped_distance
+  values = calculate_middle_values(range, almanac)
+  values[:start_to_middle_distance] == values[:start_to_middle_mapped_distance] &&
+    values[:start_to_middle_distance] + 1 != values[:start_to_element_after_middle_mapped_distance]
 end
+
 def middle_inside_target_range?(range, almanac)
-  start_value = range[:start]
-  # middle_value = range[:middle]
-  middle_value = range[:start] + (range[:end] - range[:start]) / 2
-  range[:middle] = middle_value
-  start_to_middle_distance = middle_value - start_value
-
-  start_value_mapped = e2e_mapping(start_value, almanac)
-  middle_value_mapped =  e2e_mapping(middle_value, almanac)
-  start_to_middle_mapped_distance = middle_value_mapped - start_value_mapped
-
-  element_after_middle_mapped = e2e_mapping(middle_value + 1, almanac)
-  start_to_element_after_middle_mapped_distance = element_after_middle_mapped - start_value_mapped
-
-  start_to_middle_distance == start_to_middle_mapped_distance &&
-    start_to_middle_distance + 1 ==  start_to_element_after_middle_mapped_distance
+  values = calculate_middle_values(range, almanac)
+  values[:start_to_middle_distance] == values[:start_to_middle_mapped_distance] &&
+    values[:start_to_middle_distance] + 1 == values[:start_to_element_after_middle_mapped_distance]
 end
 
 def middle_outside_target_range?(range, almanac)
-  start_value = range[:start]
-  # middle_value = range[:middle]
-  middle_value = range[:start] + (range[:end] - range[:start]) / 2
-  start_to_middle_distance = middle_value - start_value
-
-  start_value_mapped = e2e_mapping(start_value, almanac)
-  middle_value_mapped =  e2e_mapping(middle_value, almanac)
-  start_to_middle_mapped_distance = middle_value_mapped - start_value_mapped
-
-  element_after_middle_mapped = e2e_mapping(middle_value + 1, almanac)
-  start_to_element_after_middle_mapped_distance = element_after_middle_mapped - start_value_mapped
-
-  start_to_middle_distance != start_to_middle_mapped_distance &&
-    start_to_middle_distance + 1 !=  start_to_element_after_middle_mapped_distance
+  values = calculate_middle_values(range, almanac)
+  values[:start_to_middle_distance] != values[:start_to_middle_mapped_distance] &&
+    values[:start_to_middle_distance] + 1 != values[:start_to_element_after_middle_mapped_distance]
 end
 
 def extract_sub_ranges(range, remainder = range, almanac)

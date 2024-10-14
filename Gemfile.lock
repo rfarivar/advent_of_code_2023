@@ -1,13 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    minitest (5.11.3)
+    minitest (5.25.1)
 
 PLATFORMS
+  arm64-darwin-23
   ruby
 
 DEPENDENCIES
   minitest
 
 BUNDLED WITH
-   1.17.2
+   2.5.21

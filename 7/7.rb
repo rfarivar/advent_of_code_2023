@@ -2,13 +2,21 @@ class Hand
   attr_accessor :hand_string
   attr_accessor :hand_hash
   attr_accessor :bid
-
-  CARD_RANK = %w(A K Q J T 9 8 7 6 5 4 3 2)
-
-  def initialize(hand_string, bid = 0 )
+  def initialize(hand_string, bid = 0, joker_mode = false )
     @hand_string = hand_string
     @hand_hash = Hash.new(0)
     hand_string.chars.each {|c| @hand_hash[c] += 1}
+    if joker_mode
+      @card_bank =  %w(A K Q T 9 8 7 6 5 4 3 2 J)
+      jokers = @hand_hash["J"]
+      if jokers > 0 && jokers < 5
+        @hand_hash.delete("J")
+        max_card = @hand_hash.max_by {|k,v| v}.first
+        @hand_hash[max_card] += jokers
+      end
+    else
+      @card_bank = %w(A K Q J T 9 8 7 6 5 4 3 2)
+    end
     @bid = bid.to_i
   end
 
@@ -65,9 +73,9 @@ class Hand
       return -1
     else
       hand_string.chars.each_with_index do |card, i|
-        if CARD_RANK.index(card) < CARD_RANK.index(other.hand_string.chars[i])
+        if @card_bank.index(card) < @card_bank.index(other.hand_string.chars[i])
           return 1
-        elsif CARD_RANK.index(card) > CARD_RANK.index(other.hand_string.chars[i])
+        elsif @card_bank.index(card) > @card_bank.index(other.hand_string.chars[i])
           return -1
         end
       end
@@ -76,7 +84,7 @@ class Hand
   end
 end
 
-def read_hands(filename)
+def read_hands_round_1(filename)
   lines = File.read(filename).split("\n").map(&:strip)
   hands = []
   lines.each do |line|
@@ -86,8 +94,18 @@ def read_hands(filename)
   hands
 end
 
-def total_winnings(filename)
-  hands = read_hands(filename)
+def read_hands_round_2(filename)
+  lines = File.read(filename).split("\n").map(&:strip)
+  hands = []
+  lines.each do |line|
+    hand, bid = line.split
+    hands << Hand.new(hand, bid, true)
+  end
+  hands
+end
+
+def total_winnings_round_1(filename)
+  hands = read_hands_round_1(filename)
   hands_sorted = hands.sort
   total_winnings = 0
   hands_sorted.each_with_index do |hand, i|
@@ -96,4 +114,15 @@ def total_winnings(filename)
   total_winnings
 end
 
-puts "total_winnings: #{total_winnings('7/input')}"
+def total_winnings_round_2(filename)
+  hands = read_hands_round_2(filename)
+  hands_sorted = hands.sort
+  total_winnings = 0
+  hands_sorted.each_with_index do |hand, i|
+    total_winnings += hand.bid * (i+1)
+  end
+  total_winnings
+end
+
+puts "total_winnings_round_1: #{total_winnings_round_1('7/input')}"
+puts "total_winnings_round_2: #{total_winnings_round_2('7/input')}"

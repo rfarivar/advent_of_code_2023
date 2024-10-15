@@ -25,7 +25,9 @@ class Test7 < Minitest::Test
     @hand_nothing = Hand.new("73456")
     @hand_nothing_variant = Hand.new("23456")
 
-    @hands = read_hands("7/test")
+    @hand_with_joker = Hand.new("AJA34", 1, true)
+
+    @hands = read_hands_round_1("7/test")
   end
 
   def test_hand_object
@@ -90,7 +92,7 @@ class Test7 < Minitest::Test
   end
 
   def test_sorting
-    assert_equal 6440, total_winnings('7/test')
+    assert_equal 6440, total_winnings_round_1('7/test')
   end
 
 end

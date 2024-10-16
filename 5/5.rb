@@ -200,6 +200,8 @@ end
 # to find all of sub_ranges. Finally, we flat_map all the subranges and run the e2e function on
 # the first element of each subrange. For reference, 10 seed ranges results into
 # 149 contigous sub_ranges. The sum total of all subranges would have been 2_398_198_298
+#
+# later I found this nice visualization: https://www.reddit.com/r/adventofcode/comments/18b82w0/2023_day_5_part_2_visualizing_all_the_mapping/
 def process_round_2_using_log_n_approach
   almanac = read_file('5/input')
   result = find_lowest_location_number(almanac)

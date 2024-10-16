@@ -78,14 +78,6 @@ def all_cycles_complete?(nodes)
   end
 end
 
-
-map = read_file("8/input")
-network = map[:network]
-nodes_ending_with_A = network.filter{|m| m =~ /\w\wA/}.keys
-nodes_ending_with_Z = network.filter{|m| m =~ /\w\wZ/}.keys
-
-answers = []
-
 # A little unoptimized approach. We use the fact that each node_ending_with_A will only ever reach exactly one
 # node_ending_with_Z. How do I know this? A. Because it wouldn't work any other way, if the graph can reach more than one
 # node_ending_with_Z, it would probably make it too hard?! B, someone else plotted the nodes and found this is true:
@@ -97,7 +89,11 @@ answers = []
 # doing a small O(n^2) loop here to find which ones reach an answer. The trick is to put a limit on the number of allowed
 # cycles (1_000_000) and if we don't reach the end node within this limit, exit. Since the answer to part A (for AAA to ZZZ)
 # took only 13_771 cycles, I think 1 million is a fairly safe bet. Running all 36 loops took ~5 seconds on my machine.
-
+map = read_file("8/input")
+network = map[:network]
+nodes_ending_with_A = network.filter{|m| m =~ /\w\wA/}.keys
+nodes_ending_with_Z = network.filter{|m| m =~ /\w\wZ/}.keys
+answers = []
 limit = 1_000_000
 nodes_ending_with_A.each do |node_ending_with_A|
   nodes_ending_with_Z.each do |node_ending_with_Z|

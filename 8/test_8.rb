@@ -6,6 +6,7 @@ class Test8 < Minitest::Test
     super
     @test1_map = read_file("8/test")
     @test2_map = read_file("8/test_2")
+    @test3_map = read_file("8/test_3")
   end
 
   def test_read_file
@@ -22,8 +23,12 @@ class Test8 < Minitest::Test
     assert_equal expected_map, read_file("8/test_2")
   end
 
-  def test_traverse_network
-    assert_equal 2, traverse_network(@test1_map)
-    assert_equal 6, traverse_network(@test2_map)
+  def test_traverse_network_round_1
+    assert_equal 2, traverse_network_round_1(@test1_map)
+    assert_equal 6, traverse_network_round_1(@test2_map)
+  end
+
+  def test_traverse_network_round_2
+    assert_equal 6, traverse_network_round_2(@test3_map)
   end
 end

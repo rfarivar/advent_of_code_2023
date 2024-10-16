@@ -84,7 +84,7 @@ end
 # https://www.reddit.com/r/adventofcode/comments/18did3d/2023_day_8_part_1_my_input_maze_plotted_using/#lightbox
 #
 # Ideally, I should write another traverse_network_round_3, where we start from one of the six nodes_ending_with_A, and
-# to stop the cycle check against any of the six nodes_ending_with_Z. But I was lazy, and the function that checks the
+# to stop the cycle check against any of the six nodes_ending_with_Z. But I was lazy, and the function from round 1 that checks the
 # cycles for a specific pair of starting and ending nodes runs fairly fast. So since we only have 36 possibilities, I'm
 # doing a small O(n^2) loop here to find which ones reach an answer. The trick is to put a limit on the number of allowed
 # cycles (1_000_000) and if we don't reach the end node within this limit, exit. Since the answer to part A (for AAA to ZZZ)

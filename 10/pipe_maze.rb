@@ -111,7 +111,6 @@ class PipeMaze
 
   def count_vertical_borders(row_above_index, column, before_or_after)
     find_loop_length unless @maze_borders_found
-    row_below_index = row_above_index + 1
     columns = @maze[0].size
 
     if before_or_after == :before
@@ -124,9 +123,8 @@ class PipeMaze
     count_vertical_borders = 0
     (beginning_column..ending_column).each do |i|
       a = @maze[row_above_index][i]
-      b = @maze[row_below_index][i]
-      if @maze_pipes[row_above_index][i] && (%w(F | 7).include? a) &&
-        @maze_pipes[row_below_index][i] && (%w(L | J).include? b)
+      # Note that the ----- borders in the same row can be ignored in counting the vertical borders.
+      if @maze_pipes[row_above_index][i] && (%w(F | 7).include? a)
         count_vertical_borders += 1
       end
     end

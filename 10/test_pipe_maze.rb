@@ -69,6 +69,5 @@ class TestPipeMaze < Minitest::Test
     assert_equal 4, @test_maze_5.count_all_inside
     assert_equal 8, @test_maze_6.count_all_inside
     assert_equal 10, @test_maze_7.count_all_inside
-
   end
 end

@@ -40,4 +40,31 @@ class Test_sky < Minitest::Test
   def test_all_distances
     assert_equal 374, @sky.sum_distances
   end
+
+  def test_super_expansion
+    @sky.super_expand_sky
+    assert_equal [3, 7], @sky.empty_space_rows
+    assert_equal [2, 5, 8], @sky.empty_space_columns
+  end
+
+  def test_extract_stars_from_super_sky
+    @sky.super_expand_sky
+
+    @sky.empty_space_size = 2
+    @sky.extract_stars_from_super_sky
+    sum_distances = @sky.sum_distances
+    assert_equal 374, sum_distances
+
+    @sky.empty_space_size = 10
+    @sky.stars = []
+    @sky.extract_stars_from_super_sky
+    sum_distances = @sky.sum_distances
+    assert_equal 1030, sum_distances
+
+    @sky.empty_space_size = 100
+    @sky.stars = []
+    @sky.extract_stars_from_super_sky
+    sum_distances = @sky.sum_distances
+    assert_equal 8410, sum_distances
+  end
 end
